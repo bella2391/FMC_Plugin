@@ -1,0 +1,16 @@
+name: bellaplugin
+version: 0.0.1
+main: net.ttk2.Test
+
+commands:
+  fly:
+    usage: /<Command>
+    description: can fly in survival
+
+  medic:
+    usage: /<Command>
+    description: can medic if you send this command
+
+  potion:
+    usage: /Potion <type>
+    description: add effect to mob

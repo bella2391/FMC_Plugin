@@ -1,0 +1,7 @@
+server : ""
+host: ""
+database: ""
+port: 
+user: ""
+pass: ""
+discord_webhook_url: ""
