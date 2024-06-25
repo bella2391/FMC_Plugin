@@ -26,11 +26,6 @@
            <version>1.21-R0.1-SNAPSHOT</version>
            <scope>provided</scope>
     </dependency>
-    <dependency>
-  		<groupId>com.github.eduardomcb</groupId>
-  		<artifactId>discord-webhook</artifactId>
-  		<version>1.0.0</version>
-	</dependency>
 </dependencies>
   <!-- plugin.yml を pom.xml と連動させる -->
   <!--
