@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.ttk2</groupId>
-  <artifactId>bella_mysqlplugin-1.21-2-27</artifactId>
+  <artifactId>bella_mysqlplugin-1.21-2-28</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>bella_mysqlplugin-1.21-2-27</name>
+  <name>bella_mysqlplugin-1.21-2-28</name>
   <description>何かちょっと一番最初に作ったプラグインとは違ったプラグインを作りたい！</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
