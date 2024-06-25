@@ -1,11 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.ttk2</groupId>
-  <artifactId>fmc_plugin-1.21-29</artifactId>
+  <artifactId>fmc_plugin-1.21-31</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>fmc_plugin-1.21-29</name>
+  <name>fmc_plugin-1.21-31</name>
   <description>何かちょっと一番最初に作ったプラグインとは違ったプラグインを作りたい！</description>
   <properties>
+  	<java.version>22</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--<maven.compiler.source>22</maven.compiler.source>
     <maven.compiler.target>22</maven.compiler.target>-->

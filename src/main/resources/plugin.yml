@@ -1,7 +1,8 @@
 name: bellaplugin
 version: 0.0.1
 main: net.ttk2.Test
-
+api-version: '1.21'
+description: This plugin is provided by FMC Server
 commands:
   fly:
     usage: /<Command>

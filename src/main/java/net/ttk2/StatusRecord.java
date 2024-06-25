@@ -75,10 +75,6 @@ public class StatusRecord {
 		return null;
     }
 
-    private char String(String string) {
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
-	}
 	private void openConnection() throws SQLException, ClassNotFoundException {
         if (conn != null && !conn.isClosed()) {
             return;
