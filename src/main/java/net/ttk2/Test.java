@@ -132,7 +132,7 @@ public class Test extends JavaPlugin {
         public void onPlayerJoin(PlayerJoinEvent e) {
             e.getPlayer().sendMessage("Welcome to my world!");
         	Player p = e.getPlayer();
-        	e.setJoinMessage(ChatColor.YELLOW+p.getName()+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！");
+        	e.setJoinMessage(ChatColor.YELLOW+p.getName()+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！！");
         	//UUID u = p.getUniqueId();
         	Player player = e.getPlayer();
         	StatusRecord statusRecord = new StatusRecord();
