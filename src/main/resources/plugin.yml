@@ -1,17 +1,9 @@
-name: bellaplugin
+name: fmc-plugin
 version: 0.0.1
 main: net.ttk2.Test
 api-version: '1.21'
 description: This plugin is provided by FMC Server
 commands:
-  fly:
-    usage: /<Command>
+  fmc:
+    usage: /fmc [fly]
     description: can fly in survival
-
-  medic:
-    usage: /<Command>
-    description: can medic if you send this command
-
-  potion:
-    usage: /Potion <type>
-    description: add effect to mob

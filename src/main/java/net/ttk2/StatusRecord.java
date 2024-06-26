@@ -74,7 +74,10 @@ public class StatusRecord {
 		}
 		return null;
     }
-
+    //MySQLを用いるどのクラスでも、openConnection();を書けば
+    //たとえ、MySQLサーバーが落ちた後でも、つなぎなおしてくれる。
+    //そういう意味で、on enableクラスに、conn=を定義せんくてもいいかも。
+    //まぁ最後の方に、サーバーがついたときにMySQLにアクセスすることになるけど、各サーバー名のカラムにオンラインであることを知らせるTrueをね
 	private void openConnection() throws SQLException, ClassNotFoundException {
         if (conn != null && !conn.isClosed()) {
             return;
@@ -89,4 +92,5 @@ public class StatusRecord {
         }
     }
 }
+
 
