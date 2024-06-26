@@ -1,9 +1,11 @@
-name: fmc-plugin
+name: FMC-Plugin
 version: 0.0.1
 main: net.ttk2.Test
+author: Bella
+website: keypforev.ddns.net
 api-version: '1.21'
-description: This plugin is provided by FMC Server
+description: "§6§lThis plugin is provided by FMC Server!!"
 commands:
   fmc:
-    usage: /fmc [fly]
+    usage: /<command> [potion|fly|reload]
     description: can fly in survival

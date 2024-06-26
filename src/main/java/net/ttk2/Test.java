@@ -130,7 +130,7 @@ public class Test extends JavaPlugin {
     		switch (args[0].toLowerCase()) {
     		case "potion":
     			for (PotionEffectType potion : PotionEffectType.values()) {
-    				if (!sender.hasPermission("myplugin.gm." + potion.getName().toLowerCase())) continue;    		   
+    				if (!sender.hasPermission("fmc.potion." + potion.getName().toLowerCase())) continue;    		   
     		        	ret.add(potion.getName());
     			}
     			return StringUtil.copyPartialMatches(args[1].toLowerCase(), ret, new ArrayList<String>());
