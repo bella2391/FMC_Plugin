@@ -21,23 +21,13 @@ import java.util.List;
 
 
 public class Test extends JavaPlugin {
-	private List<String> subcommands = new ArrayList<>(Arrays.asList("potion","medic"));
-	//private static final String[] COMMANDS = { "minecraft", "spigot", "bukkit", "google" };
-	//public List<String> subcommands = new ArrayList<>(Arrays.asList("fly","potion","reload"));
-	//	getConfig().set("count",1);
-	//	saveConfig();
+	private List<String> subcommands = new ArrayList<>(Arrays.asList("reload","potion","medic","fly"));
     public static String host, database, username, password,server,discord_webhook_url;
     public static int port;
     @Override
     public void onEnable() {
-    	// config.ymlが存在しない場合はファイルに出力します。
-    	saveDefaultConfig();
-    	// config.ymlを読み込みます。
     	SetConfig();
-    	// この2つは殆ど定型文の様な物なので覚えておきましょう。
-        //ログインメッセージの表示設定
         getServer().getPluginManager().registerEvents(new LoginMsg(), this);
-        //開始時のログ出力
         getLogger().info("プラグインが有効になりました。");
     }
     
@@ -60,6 +50,12 @@ public class Test extends JavaPlugin {
     	}
 
       switch (args[0].toLowerCase()) {
+      case "reload":
+    	  //SetConfig();
+    	  reloadConfig();
+    	  SetConfig();
+    	  sender.sendMessage(ChatColor.GREEN+"コンフィグをリロードしました。");
+    	  return true;
       case "potion":
     	  if(!(sender instanceof Player)) {
     		  sender.sendMessage(ChatColor.RED+"このコマンドはプレイヤーにしか実行できません！");
@@ -86,7 +82,6 @@ public class Test extends JavaPlugin {
       case "medic":
     	  if(!(sender instanceof Player)) {
     		  //if sender is not player
-    		  //error occurs if executing on console
     		  sender.sendMessage(ChatColor.GREEN + "このプラグインはプレイヤーでなければ実行できません。");
     		  return true;
     	  }
@@ -98,7 +93,6 @@ public class Test extends JavaPlugin {
       case "fly":
     	  if(!(sender instanceof Player)) {
     		  //if sender is not player
-    		  //error occurs if executing on console
     		  sender.sendMessage(ChatColor.GREEN + "このプラグインはプレイヤーでなければ実行できません。");
     		  return true;
     	  }
@@ -161,6 +155,7 @@ public class Test extends JavaPlugin {
     }
     
     public void SetConfig() {
+    	saveDefaultConfig();
     	FileConfiguration config = getConfig();
         host = config.getString("host");
         port = config.getInt("port");
