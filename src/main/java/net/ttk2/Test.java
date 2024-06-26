@@ -14,10 +14,12 @@ import org.bukkit.util.StringUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 
 public class Test extends JavaPlugin {
@@ -27,8 +29,18 @@ public class Test extends JavaPlugin {
     @Override
     public void onEnable() {
     	SetConfig();
+        //getServer().getPluginManager().registerEvents((Listener) new DiscordWebhook(Test.discord_webhook_url), this);
+    	//getServer().getPluginManager().registerEvent(new EventListeners(), this);
         getServer().getPluginManager().registerEvents(new LoginMsg(), this);
         getLogger().info("プラグインが有効になりました。");
+		DiscordWebhook webhook = new DiscordWebhook(Test.discord_webhook_url);
+	    webhook.addEmbed(new DiscordWebhook.EmbedObject().setDescription("サーバーがまもなく起動します。"));
+	    try {
+	    	webhook.execute(); //Handle exception
+	    }
+	    catch (java.io.IOException e){
+	    	getLogger().severe(e.getStackTrace().toString());
+	    }
     }
     
     @Override
@@ -146,11 +158,25 @@ public class Test extends JavaPlugin {
         public void onPlayerJoin(PlayerJoinEvent e) {
             e.getPlayer().sendMessage("Welcome to my world!");
         	Player p = e.getPlayer();
-        	e.setJoinMessage(ChatColor.YELLOW+p.getName()+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！！");
-        	//UUID u = p.getUniqueId();
-        	Player player = e.getPlayer();
+        	String name = p.getName();
+        	UUID uuid = p.getUniqueId();
+        	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！！");
+        	
         	StatusRecord statusRecord = new StatusRecord();
-			String joinstatus = statusRecord.savePlayer(player);
+        	String joinstatus = statusRecord.savePlayer(p);
+        	if(!discord_webhook_url.isEmpty()) {
+            	switch (joinstatus) {
+            	case "pass":
+            		DiscordWebhook webhook = new DiscordWebhook(Test.discord_webhook_url);
+            		webhook.setContent(name+"が参加したぜよ！(uuidは"+uuid+")");
+            		try {
+            		    webhook.execute(); //Handle exception
+            		}    		    
+            		catch (java.io.IOException e1){
+            			getLogger().severe(e1.getStackTrace().toString());
+            		}
+            	}
+        	}
         }
     }
     
@@ -165,4 +191,23 @@ public class Test extends JavaPlugin {
         server = config.getString("server");
         discord_webhook_url = config.getString("discord_webhook_url");
     }
+    
+    /*
+	public void DiscordMsg(String msg) {
+		if(Test.discord_webhook_url.isEmpty()) {
+			//String a = "";
+			//Objects.nonNull(a);
+			System.exit(0);
+		}
+		
+		// TODO 自動生成されたコンストラクター・スタブ
+		DiscordWebhook webhook = new DiscordWebhook(Test.discord_webhook_url);
+		webhook.setContent(msg);
+	    try {
+	    	webhook.execute(); //Handle exception
+	    }    		    
+	    catch (java.io.IOException e1){
+	    	getLogger().severe(e1.getStackTrace().toString());
+	    } 
+	}*/
 }

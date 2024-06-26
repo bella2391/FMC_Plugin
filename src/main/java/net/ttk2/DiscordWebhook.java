@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
  * Class used to execute Discord Webhooks with low effort
  * Come from: https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb

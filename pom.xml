@@ -5,6 +5,15 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>FMC_Plugin-1.21-38</name>
   <description>何かちょっと一番最初に作ったプラグインとは違ったプラグインを作りたい！</description>
+  <build>
+  	<resources>
+  		<resource>
+  			<targetPath>.</targetPath>
+  			<filtering>true</filtering>
+  			<directory>src/main/resources</directory>
+  		</resource>
+  	</resources>
+  </build>
   <properties>
   	<java.version>22</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
