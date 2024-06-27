@@ -11,32 +11,37 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.StringUtil;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
-
-public class Test extends JavaPlugin {
+public class Main extends JavaPlugin {
 	private List<String> subcommands = new ArrayList<>(Arrays.asList("reload","potion","medic","fly"));
-    public static String host, database, username, password,server,discord_webhook_url;
-    public static int port;
+    public String host, database, username, password,server,discord_webhook_url;
+    public int port;
+    public FileConfiguration config;
     @Override
     public void onEnable() {
-    	SetConfig();
-        //getServer().getPluginManager().registerEvents((Listener) new DiscordWebhook(Test.discord_webhook_url), this);
-    	//getServer().getPluginManager().registerEvent(new EventListeners(), this);
-        getServer().getPluginManager().registerEvents(new LoginMsg(), this);
+    	saveDefaultConfig();
+    	FileConfiguration config = getConfig();
+    	new SetConfig(config);
+        getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		Database m = new Database();
+    	//if(!host.isEmpty() && !database.isEmpty() && !username.isEmpty() && !password.isEmpty() && !server.isEmpty() && Objects.nonNull(port) && 1<=port && port<=65535) {
+		try {
+			m.openConnection();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+    	//}
         getLogger().info("プラグインが有効になりました。");
-		DiscordWebhook webhook = new DiscordWebhook(Test.discord_webhook_url);
+		DiscordWebhook webhook = new DiscordWebhook(SetConfig.discord_webhook_url);
 	    webhook.addEmbed(new DiscordWebhook.EmbedObject().setDescription("サーバーがまもなく起動します。"));
 	    try {
-	    	webhook.execute(); //Handle exception
+	    	webhook.execute();
 	    }
 	    catch (java.io.IOException e){
 	    	getLogger().severe(e.getStackTrace().toString());
@@ -45,12 +50,11 @@ public class Test extends JavaPlugin {
     
     @Override
     public void onDisable() {
-        //停止時のログ出力
         getLogger().info("プラグインが無効になりました。");
     }
     
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	@Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
     	if (args.length == 0 || !subcommands.contains(args[0].toLowerCase())) {
     		sender.sendMessage(args.length == 0 ? "" : args[0].toLowerCase());
     		return true;
@@ -64,8 +68,10 @@ public class Test extends JavaPlugin {
       switch (args[0].toLowerCase()) {
       case "reload":
     	  //SetConfig();
+    	  //saveDefaultConfig();
     	  reloadConfig();
-    	  SetConfig();
+    	  FileConfiguration config = getConfig();
+    	  new SetConfig(config);
     	  sender.sendMessage(ChatColor.GREEN+"コンフィグをリロードしました。");
     	  return true;
       case "potion":
@@ -93,7 +99,6 @@ public class Test extends JavaPlugin {
     	  }
       case "medic":
     	  if(!(sender instanceof Player)) {
-    		  //if sender is not player
     		  sender.sendMessage(ChatColor.GREEN + "このプラグインはプレイヤーでなければ実行できません。");
     		  return true;
     	  }
@@ -104,7 +109,6 @@ public class Test extends JavaPlugin {
     	  return true;
       case "fly":
     	  if(!(sender instanceof Player)) {
-    		  //if sender is not player
     		  sender.sendMessage(ChatColor.GREEN + "このプラグインはプレイヤーでなければ実行できません。");
     		  return true;
     	  }
@@ -117,9 +121,8 @@ public class Test extends JavaPlugin {
       return true;
     }
 
-    @SuppressWarnings("deprecation")
-	@Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    @Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
     	List<String> ret = new ArrayList<>();
 
     	switch (args.length) {
@@ -145,69 +148,10 @@ public class Test extends JavaPlugin {
     	return Collections.emptyList();
     }
   
-    //新しくメソッドを定義
     private boolean containsPotionEffectType(String string) {
     	@SuppressWarnings("deprecation")
 		PotionEffectType effectType = PotionEffectType.getByName(string);
     	if(effectType == null) return false;
     	return true;
     }
-
-    class LoginMsg implements Listener {
-    	@EventHandler
-        public void onPlayerJoin(PlayerJoinEvent e) {
-            e.getPlayer().sendMessage("Welcome to my world!");
-        	Player p = e.getPlayer();
-        	String name = p.getName();
-        	UUID uuid = p.getUniqueId();
-        	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！！");
-        	
-        	StatusRecord statusRecord = new StatusRecord();
-        	String joinstatus = statusRecord.savePlayer(p);
-        	if(!discord_webhook_url.isEmpty()) {
-            	switch (joinstatus) {
-            	case "pass":
-            		DiscordWebhook webhook = new DiscordWebhook(Test.discord_webhook_url);
-            		webhook.setContent(name+"が参加したぜよ！(uuidは"+uuid+")");
-            		try {
-            		    webhook.execute(); //Handle exception
-            		}    		    
-            		catch (java.io.IOException e1){
-            			getLogger().severe(e1.getStackTrace().toString());
-            		}
-            	}
-        	}
-        }
-    }
-    
-    public void SetConfig() {
-    	saveDefaultConfig();
-    	FileConfiguration config = getConfig();
-        host = config.getString("host");
-        port = config.getInt("port");
-        database = config.getString("database");
-        username = config.getString("user");
-        password = config.getString("pass");
-        server = config.getString("server");
-        discord_webhook_url = config.getString("discord_webhook_url");
-    }
-    
-    /*
-	public void DiscordMsg(String msg) {
-		if(Test.discord_webhook_url.isEmpty()) {
-			//String a = "";
-			//Objects.nonNull(a);
-			System.exit(0);
-		}
-		
-		// TODO 自動生成されたコンストラクター・スタブ
-		DiscordWebhook webhook = new DiscordWebhook(Test.discord_webhook_url);
-		webhook.setContent(msg);
-	    try {
-	    	webhook.execute(); //Handle exception
-	    }    		    
-	    catch (java.io.IOException e1){
-	    	getLogger().severe(e1.getStackTrace().toString());
-	    } 
-	}*/
 }

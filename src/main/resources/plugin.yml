@@ -1,6 +1,6 @@
 name: FMC-Plugin
 version: 0.0.1
-main: net.ttk2.Test
+main: net.ttk2.Main
 author: Bella
 website: keypforev.ddns.net
 api-version: '1.21'

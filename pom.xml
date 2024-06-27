@@ -2,8 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.ttk2</groupId>
   <artifactId>FMC_Plugin-1.21</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>FMC_Plugin-1.21-38</name>
+  <version>0.0.2-SNAPSHOT</version>
+  <name>FMC_Plugin-1.21</name>
   <description>何かちょっと一番最初に作ったプラグインとは違ったプラグインを作りたい！</description>
   <build>
   	<resources>
