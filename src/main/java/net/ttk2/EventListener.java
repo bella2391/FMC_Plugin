@@ -11,10 +11,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
 import org.bukkit.configuration.file.FileConfiguration;
 //public class EventListener extends JavaPlugin implements Listener,Plugin{
 //public final class EventListener extends Main implements Listener{
-public final class EventListener implements Listener
+public final class EventListener implements Listener,PluginMessageListener
 {
     public Connection conn;
     public String host, database, username, password, server, discord_webhook_url;
@@ -36,6 +41,24 @@ public final class EventListener implements Listener
 		}
 	}
     
+	@EventHandler
+	public void onPluginMessageReceived(String channel, Player player, byte[] message)
+	{
+        if( !channel.equalsIgnoreCase( "my:channel" ) )
+        {
+            return;
+        }
+	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
+	    String subchannel = in.readUTF();
+	    if (subchannel.equalsIgnoreCase("MySubChannel"))
+	    {
+            String data1 = in.readUTF();
+            String data2 = in.readUTF();
+            this.plugin.getLogger().info("data1: "+data1);
+            this.plugin.getLogger().info("data2: "+data2);
+	    }
+	}
+	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{
