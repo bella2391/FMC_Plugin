@@ -11,9 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
 import org.bukkit.configuration.file.FileConfiguration;
-//public class EventListener extends JavaPlugin implements Listener,Plugin{
-//public final class EventListener extends Main implements Listener{
+
 public final class EventListener implements Listener
 {
     public Connection conn;
@@ -35,7 +35,7 @@ public final class EventListener implements Listener
 			e.printStackTrace();
 		}
 	}
-    
+	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{
