@@ -13,13 +13,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.StringUtil;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Main extends JavaPlugin
+public class Main extends JavaPlugin implements PluginMessageListener
 {
 	private List<String> subcommands = new ArrayList<>(Arrays.asList("reload","potion","medic","fly"));
     public String host, database, username, password,server,discord_webhook_url;
@@ -47,8 +50,8 @@ public class Main extends JavaPlugin
         {
             return;
         }
-        getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", (PluginMessageListener) this );
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "my:channel");
+        getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", this );
+        //getServer().getMessenger().registerOutgoingPluginChannel(this, "my:channel");
         
         getLogger().info("プラグインが有効になりました。");
         
@@ -191,6 +194,25 @@ public class Main extends JavaPlugin
     	if(effectType == null) return false;
     	return true;
     }
+
+	@Override
+	
+	public void onPluginMessageReceived(String channel, Player player, byte[] message)
+	{
+        if( !channel.equalsIgnoreCase( "my:channel" ) )
+        {
+            return;
+        }
+	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
+	    String subchannel = in.readUTF();
+	    if (subchannel.equalsIgnoreCase("MySubChannel"))
+	    {
+            String data1 = in.readUTF();
+            String data2 = in.readUTF();
+            this.getLogger().info("data1: "+data1);
+            this.getLogger().info("data2: "+data2);
+	    }
+	}
 	
     private void checkIfBungee()
     {
