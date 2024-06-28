@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Database{
+public class Database
+{
     public static Connection conn;
     public String host, database, username, password, server;
     public int port;
-    public Database() {
+    public Database()
+    {
         host = SetConfig.host;
         port = SetConfig.port;
         database = SetConfig.database;
@@ -17,13 +19,16 @@ public class Database{
         server = SetConfig.server;
     }
 
-	public void openConnection() throws SQLException, ClassNotFoundException {
-        if (conn != null && !conn.isClosed()) {
+	public void openConnection() throws SQLException, ClassNotFoundException
+	{
+        if (conn != null && !conn.isClosed())
+        {
             return;
         }
 
         synchronized (this) {
-            if (conn != null && !conn.isClosed()) {
+            if (conn != null && !conn.isClosed())
+            {
                 return;
             }
             Class.forName("com.mysql.jdbc.Driver");

@@ -385,7 +385,7 @@ public class DiscordWebhook {
             return builder.toString();
         }
 
-        private String quote(String string) {
+        private String quote(String string){
             return "\"" + string + "\"";
         }
     }
