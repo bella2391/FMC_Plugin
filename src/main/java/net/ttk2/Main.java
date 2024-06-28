@@ -50,7 +50,8 @@ public class Main extends JavaPlugin implements PluginMessageListener
         {
             return;
         }
-        getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", this ); // we register the incoming channel
+        getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", this );
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "my:channel");
         
         getLogger().info("プラグインが有効になりました。");
         
