@@ -26,6 +26,10 @@
         <id>spigot-repo</id>
         <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <repository>
+    	<id>jitpack.io</id>
+    	<url>https://jitpack.io</url>
+    </repository>
 </repositories>
 <dependencies>
     <!--This adds the Spigot API artifact to the build -->
@@ -42,6 +46,11 @@
         <version>1.21-R0.1-SNAPSHOT</version>
         <type>jar</type>
     	<scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.github.sunarya-thito</groupId>
+    	<artifactId>PluginQuery</artifactId>
+    	<version>1.0.44</version>
     </dependency>
 </dependencies>
   <!-- plugin.yml を pom.xml と連動させる -->

@@ -12,9 +12,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
+import septogeddon.pluginquery.PluginQuery;
+import septogeddon.pluginquery.api.QueryConnection;
+import septogeddon.pluginquery.api.QueryListener;
+import septogeddon.pluginquery.api.QueryMessenger;
+
 import org.bukkit.configuration.file.FileConfiguration;
 
-public final class EventListener implements Listener
+public final class EventListener implements Listener, QueryListener
 {
     public Connection conn;
     public String host, database, username, password, server, discord_webhook_url;
@@ -53,7 +62,10 @@ public final class EventListener implements Listener
     	String name = p.getName();
     	UUID uuid = p.getUniqueId();
     	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！！");
-    	
+    	ByteArrayDataOutput out = ByteStreams.newDataOutput();
+    	out.writeUTF("あいうえおマスター");
+    	sendPluginMessage("La_Test3",out.toByteArray());
+
         try
         {
         	conn = Database.conn; 
@@ -123,4 +135,34 @@ public final class EventListener implements Listener
             e3.printStackTrace();
         }
     }
+	
+    public void sendPluginMessage(String channel, byte[] message) {
+        QueryMessenger messenger = PluginQuery.getMessenger();
+        /*
+         * A spigot server can be connected with multiple connection,
+         * it can be a bungeecord server or another standalone program
+         */
+        if (!messenger.broadcastQuery(channel, message)) {
+            // it will return false if there is no active connections
+            throw new IllegalStateException("no active connections");
+        }
+    }
+
+	@Override
+	public void onConnectionStateChange(QueryConnection connection) throws Throwable {
+        if (connection.isConnected()) {
+        	this.plugin.getLogger().info("Connected!");
+        } else {
+        	this.plugin.getLogger().info("Discconnected!");
+        }
+	}
+
+	@Override
+	public void onQueryReceived(QueryConnection connection, String channel, byte[] message) throws Throwable {
+	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
+        String data1 = in.readUTF();
+        this.plugin.getLogger().info("data1: "+data1);
+	}
+    
+    
 }
