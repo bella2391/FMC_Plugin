@@ -12,10 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
 import septogeddon.pluginquery.PluginQuery;
+import septogeddon.pluginquery.api.QueryConnection;
 import septogeddon.pluginquery.api.QueryMessenger;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -50,10 +52,23 @@ public final class EventListener implements Listener
 		UUID uuid = p.getUniqueId();
 	}
 	
+    @org.bukkit.event.EventHandler
+    public void event(septogeddon.pluginquery.spigot.event.QueryMessageEvent event)
+    {
+    	this.plugin.getLogger().info("EventListener.event");
+        String channel = event.getChannel();
+        byte[] message = event.getMessage();
+        QueryConnection connection = event.getConnection();
+    	ByteArrayDataInput in = ByteStreams.newDataInput(message);
+        String data1 = in.readUTF();
+        this.plugin.getLogger().info("channel: "+channel);
+        this.plugin.getLogger().info("data1: "+data1);
+    }
+    
 	@EventHandler
     public void onPlayerJoin(PlayerJoinEvent e)
 	{
-    	
+		this.plugin.getLogger().info("EventListener.onPlayerJoin");
         e.getPlayer().sendMessage("Welcome to my world!");
     	Player p = e.getPlayer();
     	String name = p.getName();
@@ -61,8 +76,8 @@ public final class EventListener implements Listener
     	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてこますｿﾞ！！！！");
     	ByteArrayDataOutput out = ByteStreams.newDataOutput();
     	out.writeUTF("あいうえおマスター");
-    	sendPluginMessage("La_Test3",out.toByteArray());
-
+    	sendPluginMessage("La_Test2",out.toByteArray());
+    	this.plugin.getLogger().info("EventListener.onPlayerJoin.PluginQueryでsendしました。");
         try
         {
         	conn = Database.conn; 
@@ -133,6 +148,7 @@ public final class EventListener implements Listener
         }
     }
 	
+	//PluginQueryのoutput
     public void sendPluginMessage(String channel, byte[] message)
     {
         QueryMessenger messenger = PluginQuery.getMessenger();
@@ -146,4 +162,7 @@ public final class EventListener implements Listener
             throw new IllegalStateException("no active connections");
         }
     }
+    
+    //PluginQueryのinputがない。
+    
 }

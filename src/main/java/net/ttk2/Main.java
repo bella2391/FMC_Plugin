@@ -16,6 +16,11 @@ import org.bukkit.util.StringUtil;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
+import septogeddon.pluginquery.PluginQuery;
+import septogeddon.pluginquery.api.QueryConnection;
+import septogeddon.pluginquery.api.QueryMessageListener;
+import septogeddon.pluginquery.api.QueryMessenger;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,6 +70,7 @@ public class Main extends JavaPlugin implements PluginMessageListener
 	    {
 	    	getLogger().severe(e.getStackTrace().toString());
 	    }
+	    registerListener();
     }
     
     @Override
@@ -206,6 +212,8 @@ public class Main extends JavaPlugin implements PluginMessageListener
         }
     }
     
+    //bungee-apiのinput (outputはBungeeでしてる)
+    @Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message)
 	{
         if( !channel.equalsIgnoreCase( "my:channel" ) )
@@ -222,4 +230,25 @@ public class Main extends JavaPlugin implements PluginMessageListener
             getLogger().info("data2: "+data2);
 	    }
 	}
+    
+    //PluginQueryのinput
+    public void registerListener() {
+    	getLogger().info("Main.registerListener");
+        QueryMessenger messenger = PluginQuery.getMessenger();
+        messenger.getEventBus().registerListener(new ExampleListener());
+        net.md_5.bungee.api.plugin.Plugin plugin = null; // YOUR BUNGEECORD PLUGIN INSTANCE
+    }
+     
+    /*
+     * Listen only to Message event
+     */
+    public class ExampleListener implements QueryMessageListener {
+        @Override
+        public void onQueryReceived(QueryConnection connection, String channel, byte[] message) {
+        	getLogger().info("Main.ExampleListener.onQueryReceived");
+        	ByteArrayDataInput in = ByteStreams.newDataInput(message);
+            String data1 = in.readUTF();
+            getLogger().info("data1: "+data1);
+        }
+    }
 }
