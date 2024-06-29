@@ -12,18 +12,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
 import septogeddon.pluginquery.PluginQuery;
-import septogeddon.pluginquery.api.QueryConnection;
-import septogeddon.pluginquery.api.QueryListener;
 import septogeddon.pluginquery.api.QueryMessenger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-public final class EventListener implements Listener, QueryListener
+public final class EventListener implements Listener
 {
     public Connection conn;
     public String host, database, username, password, server, discord_webhook_url;
@@ -147,22 +144,4 @@ public final class EventListener implements Listener, QueryListener
             throw new IllegalStateException("no active connections");
         }
     }
-
-	@Override
-	public void onConnectionStateChange(QueryConnection connection) throws Throwable {
-        if (connection.isConnected()) {
-        	this.plugin.getLogger().info("Connected!");
-        } else {
-        	this.plugin.getLogger().info("Discconnected!");
-        }
-	}
-
-	@Override
-	public void onQueryReceived(QueryConnection connection, String channel, byte[] message) throws Throwable {
-	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
-        String data1 = in.readUTF();
-        this.plugin.getLogger().info("data1: "+data1);
-	}
-    
-    
 }
