@@ -52,6 +52,7 @@ public final class EventListener implements Listener
 		UUID uuid = p.getUniqueId();
 	}
 	
+	//PluginQuery
     @org.bukkit.event.EventHandler
     public void event(septogeddon.pluginquery.spigot.event.QueryMessageEvent event)
     {
@@ -162,7 +163,4 @@ public final class EventListener implements Listener
             throw new IllegalStateException("no active connections");
         }
     }
-    
-    //PluginQueryのinputがない。
-    
 }

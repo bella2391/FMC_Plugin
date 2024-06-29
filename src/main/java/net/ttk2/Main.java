@@ -27,7 +27,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Main extends JavaPlugin implements PluginMessageListener 
+//public class Main extends JavaPlugin implements PluginMessageListener
+public class Main extends JavaPlugin
 {
 	private List<String> subcommands = new ArrayList<>(Arrays.asList("reload","potion","medic","fly"));
     public String host, database, username, password,server,discord_webhook_url;
@@ -50,14 +51,6 @@ public class Main extends JavaPlugin implements PluginMessageListener
 			e.printStackTrace();
 		}
 		
-        checkIfBungee();
-        if(!getServer().getPluginManager().isPluginEnabled( this ))
-        {
-            return;
-        }
-        getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", this );
-        //getServer().getMessenger().registerOutgoingPluginChannel(this, "my:channel");
-        
         getLogger().info("プラグインが有効になりました。");
         
 		DiscordWebhook webhook = new DiscordWebhook(SetConfig.discord_webhook_url);
@@ -70,6 +63,8 @@ public class Main extends JavaPlugin implements PluginMessageListener
 	    {
 	    	getLogger().severe(e.getStackTrace().toString());
 	    }
+	    
+	    //PluginQuery
 	    registerListener();
     }
     
@@ -201,36 +196,6 @@ public class Main extends JavaPlugin implements PluginMessageListener
     	return true;
     }
 
-    private void checkIfBungee()
-    {
-        if ( !getServer().spigot().getConfig().getConfigurationSection("settings").getBoolean( "bungeecord" ) )
-        {
-            getLogger().severe( "This server is not BungeeCord." );
-            getLogger().severe( "If the server is already hooked to BungeeCord, please enable it into your spigot.yml aswell." );
-            getLogger().severe( "Plugin disabled!" );
-            getServer().getPluginManager().disablePlugin( this );
-        }
-    }
-    
-    //bungee-apiのinput (outputはBungeeでしてる)
-    @Override
-	public void onPluginMessageReceived(String channel, Player player, byte[] message)
-	{
-        if( !channel.equalsIgnoreCase( "my:channel" ) )
-        {
-            return;
-        }
-	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
-	    String subchannel = in.readUTF();
-	    if (subchannel.equalsIgnoreCase("MySubChannel"))
-	    {
-            String data1 = in.readUTF();
-            String data2 = in.readUTF();
-            getLogger().info("data1: "+data1);
-            getLogger().info("data2: "+data2);
-	    }
-	}
-    
     //PluginQueryのinput
     public void registerListener() {
     	getLogger().info("Main.registerListener");
@@ -239,9 +204,7 @@ public class Main extends JavaPlugin implements PluginMessageListener
         net.md_5.bungee.api.plugin.Plugin plugin = null; // YOUR BUNGEECORD PLUGIN INSTANCE
     }
      
-    /*
-     * Listen only to Message event
-     */
+    //Listen only to Message event
     public class ExampleListener implements QueryMessageListener {
         @Override
         public void onQueryReceived(QueryConnection connection, String channel, byte[] message) {
