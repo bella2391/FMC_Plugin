@@ -58,7 +58,7 @@ public final class EventListener implements Listener
     	Player p = e.getPlayer();
     	String name = p.getName();
     	UUID uuid = p.getUniqueId();
-    	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてかますｿﾞ！！！！");
+    	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてこますｿﾞ！！！！");
     	ByteArrayDataOutput out = ByteStreams.newDataOutput();
     	out.writeUTF("あいうえおマスター");
     	sendPluginMessage("La_Test3",out.toByteArray());
@@ -133,13 +133,15 @@ public final class EventListener implements Listener
         }
     }
 	
-    public void sendPluginMessage(String channel, byte[] message) {
+    public void sendPluginMessage(String channel, byte[] message)
+    {
         QueryMessenger messenger = PluginQuery.getMessenger();
         /*
          * A spigot server can be connected with multiple connection,
          * it can be a bungeecord server or another standalone program
          */
-        if (!messenger.broadcastQuery(channel, message)) {
+        if (!messenger.broadcastQuery(channel, message))
+        {
             // it will return false if there is no active connections
             throw new IllegalStateException("no active connections");
         }
