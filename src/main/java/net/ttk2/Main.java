@@ -27,8 +27,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//public class Main extends JavaPlugin implements PluginMessageListener
-public class Main extends JavaPlugin
+//Bungee: implements PluginMessageListener 
+public class Main extends JavaPlugin implements PluginMessageListener
 {
 	private List<String> subcommands = new ArrayList<>(Arrays.asList("reload","potion","medic","fly"));
     public String host, database, username, password,server,discord_webhook_url;
@@ -66,6 +66,14 @@ public class Main extends JavaPlugin
 	    
 	    //PluginQuery
 	    registerListener();
+	    
+	    //Bungee
+        checkIfBungee();
+        if(!getServer().getPluginManager().isPluginEnabled( this ))
+        {
+            return;
+        }
+	    getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", this );
     }
     
     @Override
@@ -214,4 +222,34 @@ public class Main extends JavaPlugin
             getLogger().info("data1: "+data1);
         }
     }
+    
+    //Bungee
+    private void checkIfBungee()
+    {
+        if ( !getServer().spigot().getConfig().getConfigurationSection("settings").getBoolean( "bungeecord" ) )
+        {
+            getLogger().severe( "This server is not BungeeCord." );
+            getLogger().severe( "If the server is already hooked to BungeeCord, please enable it into your spigot.yml aswell." );
+            getLogger().severe( "Plugin disabled!" );
+            getServer().getPluginManager().disablePlugin( this );
+        }
+    }
+    
+    @Override
+	public void onPluginMessageReceived(String channel, Player player, byte[] message)
+	{
+        if( !channel.equalsIgnoreCase( "my:channel" ) )
+        {
+            return;
+        }
+	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
+	    String subchannel = in.readUTF();
+	    if (subchannel.equalsIgnoreCase("MySubChannel"))
+	    {
+            String data1 = in.readUTF();
+            String data2 = in.readUTF();
+            getLogger().info("data1: "+data1);
+            getLogger().info("data2: "+data2);
+	    }
+	}
 }

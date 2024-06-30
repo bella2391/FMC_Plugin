@@ -16,6 +16,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PluginMessageEvent;
 import septogeddon.pluginquery.PluginQuery;
 import septogeddon.pluginquery.api.QueryConnection;
 import septogeddon.pluginquery.api.QueryMessenger;
@@ -161,6 +163,27 @@ public final class EventListener implements Listener
         {
             // it will return false if there is no active connections
             throw new IllegalStateException("no active connections");
+        }
+    }
+    
+    //Bungee
+    @EventHandler
+    public void on(PluginMessageEvent event)
+    {
+        if ( !event.getTag().equalsIgnoreCase( "my:channel" ) )
+        {
+            return;
+        }
+        ByteArrayDataInput in = ByteStreams.newDataInput( event.getData() );
+        String subChannel = in.readUTF();
+        if ( subChannel.equalsIgnoreCase( "OtherSubchannel" ) )
+        {
+            // the receiver is a ProxiedPlayer when a server talks to the proxy
+            if ( event.getReceiver() instanceof ProxiedPlayer )
+            {
+                ProxiedPlayer receiver = (ProxiedPlayer) event.getReceiver();
+                // do things
+            }
         }
     }
 }
