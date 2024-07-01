@@ -1,6 +1,7 @@
 package net.ttk2;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,14 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-
-import septogeddon.pluginquery.PluginQuery;
-import septogeddon.pluginquery.api.QueryConnection;
-import septogeddon.pluginquery.api.QueryMessenger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -52,19 +45,6 @@ public final class EventListener implements Listener
 		UUID uuid = p.getUniqueId();
 	}
 	
-    @org.bukkit.event.EventHandler
-    public void event(septogeddon.pluginquery.spigot.event.QueryMessageEvent event)
-    {
-    	this.plugin.getLogger().info("EventListener.event");
-        String channel = event.getChannel();
-        byte[] message = event.getMessage();
-        QueryConnection connection = event.getConnection();
-    	ByteArrayDataInput in = ByteStreams.newDataInput(message);
-        String data1 = in.readUTF();
-        this.plugin.getLogger().info("channel: "+channel);
-        this.plugin.getLogger().info("data1: "+data1);
-    }
-    
 	@EventHandler
     public void onPlayerJoin(PlayerJoinEvent e)
 	{
@@ -74,9 +54,6 @@ public final class EventListener implements Listener
     	String name = p.getName();
     	UUID uuid = p.getUniqueId();
     	e.setJoinMessage(ChatColor.YELLOW+name+"がサーバーに参加したゾお......オイコラなにこのチャット欄見てんねん。いてこますｿﾞ！！！！");
-    	ByteArrayDataOutput out = ByteStreams.newDataOutput();
-    	out.writeUTF("あいうえおマスター");
-    	sendPluginMessage("La_Test2",out.toByteArray());
     	this.plugin.getLogger().info("EventListener.onPlayerJoin.PluginQueryでsendしました。");
         try
         {
@@ -119,7 +96,8 @@ public final class EventListener implements Listener
             			ps.setString(3, SetConfig.server.toString());
             			ps.setBoolean(4, true);
             			ps.executeUpdate();
-            			if(!SetConfig.discord_webhook_url.isEmpty()) {
+            			if(!SetConfig.discord_webhook_url.isEmpty())
+            			{
                     		DiscordWebhook webhook = new DiscordWebhook(SetConfig.discord_webhook_url);
                     		webhook.setContent(name+"が参加したぜよ！(uuidは"+uuid+")");
                     		try
@@ -147,22 +125,4 @@ public final class EventListener implements Listener
             e3.printStackTrace();
         }
     }
-	
-	//PluginQueryのoutput
-    public void sendPluginMessage(String channel, byte[] message)
-    {
-        QueryMessenger messenger = PluginQuery.getMessenger();
-        /*
-         * A spigot server can be connected with multiple connection,
-         * it can be a bungeecord server or another standalone program
-         */
-        if (!messenger.broadcastQuery(channel, message))
-        {
-            // it will return false if there is no active connections
-            throw new IllegalStateException("no active connections");
-        }
-    }
-    
-    //PluginQueryのinputがない。
-    
 }
