@@ -41,17 +41,25 @@ public class Command implements CommandExecutor,TabExecutor{
     	if (args.length == 0 || !subcommands.contains(args[0].toLowerCase()))
     	{
     		BaseComponent[] component =
-    			    new ComponentBuilder(ChatColor.RED+"Hello ")
-    			        .append(ChatColor.DARK_RED+"world").bold(true)
-    			        .append(ChatColor.RED+"!").create();
+    			    new ComponentBuilder(ChatColor.YELLOW+"FMC COMMANDS LIST").bold(true).underlined(true)
+    			    	.append(ChatColor.DARK_AQUA+"\nYou Can Click And Paste!!")
+    			    	.append(ChatColor.AQUA+"\n\n/fmc potion <effect type>")
+    			        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/fmc potion " ))
+    			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("半径10マスのエンティティにエフェクト付与します！")))
+    			        .append(ChatColor.AQUA+"\n\n/fmc fly")
+    			        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/fmc fly"))
+    			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("空、飛べるよ！")))
+    			        .append(ChatColor.AQUA+"\n\n/fmc reload")
+    			        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/fmc reload"))
+    			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("コンフィグ、リロードします！！")))
+    			        .append(ChatColor.AQUA+"\n\n/fmc test <arg-1>")
+    			        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/fmc test "))
+    			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("第一引数を返します！")))
+    			        .append(ChatColor.AQUA+"\n\n/fmc medic")
+    			        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/fmc medic"))
+    			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("ライフが回復します！")))
+    			        .create();
     		sender.spigot().sendMessage(component);
-    		sender.sendMessage("/fmc [potion|fly|reload]");
-    		TextComponent message = new TextComponent("Click me");
-    		message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org"));
-    		message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Visit the Spigot website!")));
-    		message.addExtra("\nあいうえお");
-    		sender.spigot().sendMessage(message);
-    		//sender.sendMessage(args.length == 0 ? "" : args[0].toLowerCase());
     		return true;
     	}
 
