@@ -8,6 +8,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.SQLException;
 
 public class Main extends JavaPlugin implements PluginMessageListener 
@@ -16,6 +18,8 @@ public class Main extends JavaPlugin implements PluginMessageListener
     public int port;
     public FileConfiguration config;
     private Command commands = new Command(this);
+    private Thread socketThread;
+    private volatile boolean running = true;
     
 	@Override
     public void onEnable()
@@ -56,6 +60,8 @@ public class Main extends JavaPlugin implements PluginMessageListener
             return;
         }
         getServer().getMessenger().registerIncomingPluginChannel( this, "my:channel", this );
+        startSocketServer();
+        
     }
     
     @Override
@@ -64,6 +70,7 @@ public class Main extends JavaPlugin implements PluginMessageListener
         getLogger().info("プラグインが無効になりました。");
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
+        stopSocketServer();
     }
     
     private void checkIfBungee()
@@ -96,4 +103,36 @@ public class Main extends JavaPlugin implements PluginMessageListener
             getLogger().info("data2: "+data2);
 	    }
 	}
+    
+    private void startSocketServer() {
+        socketThread = new Thread(() -> {
+            int port = 8765;
+
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
+                getLogger().info("Server is listening on port " + port);
+
+                while (running) {
+                    Socket socket = serverSocket.accept();
+                    getLogger().info("New client connected");
+
+                    new SocketServerThread(socket).start();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        socketThread.start();
+    }
+
+    private void stopSocketServer() {
+        running = false;
+        try {
+            if (socketThread != null && socketThread.isAlive()) {
+                socketThread.join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

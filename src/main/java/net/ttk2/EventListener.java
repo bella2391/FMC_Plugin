@@ -12,6 +12,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PluginMessageEvent;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -125,4 +132,29 @@ public final class EventListener implements Listener
             e3.printStackTrace();
         }
     }
+	
+	/*
+	@net.md_5.bungee.event.EventHandler
+    public void on(PluginMessageEvent event)
+    {
+        if ( !event.getTag().equalsIgnoreCase( "my:channel" ) )
+        {
+            return;
+        }
+        ByteArrayDataInput in = ByteStreams.newDataInput( event.getData() );
+        String subChannel = in.readUTF();
+        if ( subChannel.equalsIgnoreCase( "MySubChannel" ) )
+        {
+            // the receiver is a ProxiedPlayer when a server talks to the proxy
+            if ( event.getReceiver() instanceof ProxiedPlayer )
+            {
+                ProxiedPlayer receiver = (ProxiedPlayer) event.getReceiver();
+                // do things
+                String data1 = in.readUTF();
+                String data2 = in.readUTF();
+                this.plugin.getLogger().info("data1: "+data1);
+                this.plugin.getLogger().info("data2: "+data2);
+            }
+        }
+    }*/
 }
